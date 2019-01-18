@@ -47,6 +47,13 @@ public class CIMServerHandle extends SimpleChannelInboundHandler<CIMRequestProto
         clearRouteInfo(userInfo);
     }
 
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        ctx.channel().remoteAddress();
+        LOGGER.info("用户链接进来");
+        super.channelActive(ctx);
+    }
+
     /**
      * 清除路由关系
      * @param userInfo

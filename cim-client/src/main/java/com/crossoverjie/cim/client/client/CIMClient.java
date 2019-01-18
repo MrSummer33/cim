@@ -117,9 +117,16 @@ public class CIMClient {
      * @param msg
      */
     public void sendStringMsg(String msg) {
-        ByteBuf message = Unpooled.buffer(msg.getBytes().length);
-        message.writeBytes(msg.getBytes());
-        ChannelFuture future = channel.writeAndFlush(message);
+
+        CIMRequestProto.CIMReqProtocol msgBean = CIMRequestProto.CIMReqProtocol.newBuilder()
+                .setRequestId(userId)
+                .setReqMsg(msg)
+                .setType(Constants.CommandType.MSG)
+                .build();
+
+//        ByteBuf message = Unpooled.buffer(msg.getBytes().length);
+//        message.writeBytes(msg.getBytes());
+        ChannelFuture future = channel.writeAndFlush(msgBean);
         future.addListener((ChannelFutureListener) channelFuture ->
                 LOGGER.info("客户端手动发消息成功={}", msg));
 

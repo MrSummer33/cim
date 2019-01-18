@@ -2,6 +2,7 @@ package com.crossoverjie.cim.route.cache;
 
 import com.crossoverjie.cim.route.kit.ZKit;
 import com.google.common.cache.LoadingCache;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +14,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Function: 服务器节点缓存
  *
- * @author crossoverJie
- *         Date: 2018/8/19 01:31
+ * @author crossoverJie Date: 2018/8/19 01:31
  * @since JDK 1.8
  */
 @Component
@@ -34,25 +34,26 @@ public class ServerCache {
         cache.put(key, key);
     }
 
+    @PostConstruct
+    public void init() {
+        cache.put("127.0.0.1:11211:8081", "127.0.0.1:11211:8081");
+    }
+
 
     /**
      * 更新所有缓存/先删除 再新增
-     *
-     * @param currentChilds
      */
     public void updateCache(List<String> currentChilds) {
-        cache.invalidateAll();
-        for (String currentChild : currentChilds) {
-            String key = currentChild.split("-")[1];
-            addCache(key);
-        }
+//        cache.invalidateAll();
+//        for (String currentChild : currentChilds) {
+//            String key = currentChild.split("-")[1];
+//            addCache(key);
+//        }
     }
 
 
     /**
      * 获取所有的服务列表
-     *
-     * @return
      */
     public List<String> getAll() {
 
@@ -74,8 +75,6 @@ public class ServerCache {
 
     /**
      * 选取服务器
-     *
-     * @return
      */
     public String selectServer() {
         List<String> all = getAll();
